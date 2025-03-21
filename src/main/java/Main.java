@@ -12,7 +12,8 @@ public class Main {
         int[] testArr3 = new int[]{1, 0, 0, -1, 0};
         int[] testArr4 = new int[]{1, 0, 0, 0, -1};
         int[] testArr5 = new int[]{5, 1, 2, -3, -5};
-        int[] testArr6 = new int[]{5, 0,1 , -6, 2};
+        int[] testArr6 = new int[]{5, 0, 1, -6, 2};
+        int[] testArr7 = new int[]{-1, -2, -1, 4, 0, 0};
 
         int total = countTotalSubarrays(testArr1, true);
         System.out.println("Total subarrays = " + total);
@@ -49,7 +50,7 @@ public class Main {
                         }
                         count++;
                         if (printSubarray) {
-                            System.out.println("N** subarray: " + Arrays.toString(subArray));
+                            System.out.println("N subarray: " + Arrays.toString(subArray) + "  *markingForTest* ");
                         }
                     } else if (i > j && (arr[i] + arr[j]) != 0) {
                         t = j;
@@ -60,7 +61,7 @@ public class Main {
                         }
                         count++;
                         if (printSubarray) {
-                            System.out.println("**N subarray: " + Arrays.toString(subArray));
+                            System.out.println("N subarray: " + Arrays.toString(subArray) + "  *markingForTest2*");
                         }
                     }
                 }
