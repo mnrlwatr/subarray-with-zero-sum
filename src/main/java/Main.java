@@ -1,6 +1,5 @@
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Main {
     // Язык программирования: Java (jdk 17)
@@ -13,101 +12,59 @@ public class Main {
         int[] testArr6 = new int[]{5, 0, 1, -6, 2};
         int[] testArr7 = new int[]{-1, -2, -1, 4, 0, 0};
 
-        //int total = countTotalSubarrays(testArr1, true);
-        //System.out.println("Total subarrays = " + total);
-        printAllNumberPartitions(5);
+        printSubarray(testArr1);
     }
 
-    private static int countTotalSubarrays(int[] arr, boolean printSubarray) {
-        int count = 0;
-        int[] subArray;
-        int sum;
-        for (int i = 0; i < arr.length; i++) {
-            sum = arr[i];
-            for (int j = 0; j < arr.length; j++) {
-                if (i == j) {
-                    sum = arr[i];
-                    continue;
+    public static void printSubarray(int[] array) {
+        ArrayList<ArrayList<Integer>> arrayLists = getAllCombination(array.length, 2);
+        for (ArrayList<Integer> arrayList1 : arrayLists) {
+            int sum = 0;
+            for (Integer integer : arrayList1) {
+                sum += array[integer];
+            }
+            if (sum == 0) {
+                StringBuilder sb = new StringBuilder("[");
+                for (Integer i : arrayList1) {
+                    sb.append(array[i]);
+                    sb.append(",");
                 }
-                sum += arr[j];
-                if (sum == 0) {
-                    int t;
-                    if (i < j) {
-                        t = i;
-                        subArray = new int[(j - i) + 1];
-                        for (int k = 0; k < subArray.length; k++) {
-                            subArray[k] = arr[t++];
-                        }
-                        count++;
-                        if (printSubarray) {
-                            System.out.println("N subarray: " + Arrays.toString(subArray) + "  *markingForTest* ");
-                        }
-                    } else if (i > j) {
-                        t = j;
-                        subArray = new int[j + 2];
-                        subArray[0] = arr[i];
-                        for (int k = 1; k < subArray.length; k++) {
-                            subArray[k] = arr[t--];
-                        }
-                        count++;
-                        if (printSubarray) {
-                            System.out.println("N subarray: " + Arrays.toString(subArray) + "  *markingForTest2*");
-                        }
-                    }
-                }
+                sb.setCharAt(sb.lastIndexOf(","),']');
+                System.out.println(sb);
             }
         }
-        return count;
+
     }
 
-    public static int[] getNextPartition(int[] partition) {
-        if (partition.length == 1) {
-            return null;
+    private static ArrayList<ArrayList<Integer>> getAllCombination(int n, int k) {
+        ArrayList<ArrayList<Integer>> list2 = new ArrayList<>();
+        int[] comb = new int[k + 2];
+        for (int i = 0; i < k; i++) {
+            comb[i] = i;
         }
-        int minIndex = 0;
-        for (int i = 0; i < partition.length - 1; i++) {
-            if (partition[i] < partition[minIndex]) {
-                minIndex = i;
+        comb[k] = n;
+        comb[k + 1] = 0;
+        for (; ; ) {
+            list2.add(arrayPart(comb, 0, k));
+            int j = 0;
+            for (; comb[j] + 1 == comb[j + 1]; ) {
+                comb[j] = j;
+                j = j + 1;
+            }
+            if (j < k) {
+                comb[j]++;
+            } else {
+                break;
             }
         }
-        partition[minIndex] += 1;
-        partition[partition.length - 1] -= 1;
-        minIndex += 1;
-        int partSum = 0;
-        for (int i = minIndex; i < partition.length; i++) {
-            partSum += partition[i];
-        }
-        int[] nextPartiotion = Arrays.copyOf(partition,minIndex + partSum);
-        for (int i = minIndex; i < nextPartiotion.length; i++) {
-            nextPartiotion[i] = 1;
-        }
-        return nextPartiotion;
+        return list2;
     }
 
-    public static ArrayList<int[]> printAllNumberPartitions(int number) {
-        ArrayList<int[]> result = new ArrayList<>();
-        if(number==1||number==-1){
-            number=number*-1;
-            result.add(new int[]{number});
-            for (int[] ints : result) {
-                System.out.println(Arrays.toString(ints));
-            }
-            return result;
+    private static ArrayList<Integer> arrayPart(int[] array, int s, int e) {
+        ArrayList<Integer> list = new ArrayList<>();
+        for (int i = s; i < e - 1; i++) {
+            list.add(array[i]);
         }
-        int[] partition=null;
-        if(number>0){
-            partition = new int[number];
-            Arrays.fill(partition, -1);
-        } else {
-             partition= new int[(number*-1)];
-            Arrays.fill(partition, 1);
-        }
-
-        for (; partition != null;) {
-            System.out.println(Arrays.toString(partition));
-            partition = getNextPartition(partition);
-        }
-        return result;
+        list.add(array[e - 1]);
+        return list;
     }
-
 }
