@@ -12,31 +12,39 @@ public class Main {
         int[] testArr6 = new int[]{5, 0, 1, -6, 2};
         int[] testArr7 = new int[]{-1, -2, -1, 4, 0, 0};
 
-        printSubarray(testArr1);
+        int totalSubarrays = findSubarrays(testArr1, true);
+        System.out.println("totalSubarrays with zero sum = " + totalSubarrays);
     }
 
-    public static void printSubarray(int[] array) {
-        ArrayList<ArrayList<Integer>> arrayLists = getAllCombination(array.length, 2);
-        for (ArrayList<Integer> arrayList1 : arrayLists) {
-            int sum = 0;
-            for (Integer integer : arrayList1) {
-                sum += array[integer];
-            }
-            if (sum == 0) {
-                StringBuilder sb = new StringBuilder("[");
-                for (Integer i : arrayList1) {
-                    sb.append(array[i]);
-                    sb.append(",");
+    public static int findSubarrays(int[] array, boolean print) {
+        int argArrayLength = array.length;
+        int total = 0;
+        for (int i = 2; i <= argArrayLength; i++) {
+            ArrayList<ArrayList<Integer>> arrayLists = getAllCombination(argArrayLength, i);
+            for (ArrayList<Integer> arrayList : arrayLists) {
+                int sum = 0;
+                for (Integer integer : arrayList) {
+                    sum += array[integer];
                 }
-                sb.setCharAt(sb.lastIndexOf(","),']');
-                System.out.println(sb);
+                if (sum == 0) {
+                    total++;
+                    if (print) {
+                        StringBuilder sb = new StringBuilder("[");
+                        for (Integer integer : arrayList) {
+                            sb.append(array[integer]);
+                            sb.append(",");
+                        }
+                        sb.setCharAt(sb.lastIndexOf(","), ']');
+                        System.out.println(sb);
+                    }
+                }
             }
         }
-
+        return total;
     }
 
     private static ArrayList<ArrayList<Integer>> getAllCombination(int n, int k) {
-        ArrayList<ArrayList<Integer>> list2 = new ArrayList<>();
+        ArrayList<ArrayList<Integer>> arrayLists = new ArrayList<>();
         int[] comb = new int[k + 2];
         for (int i = 0; i < k; i++) {
             comb[i] = i;
@@ -44,7 +52,7 @@ public class Main {
         comb[k] = n;
         comb[k + 1] = 0;
         for (; ; ) {
-            list2.add(arrayPart(comb, 0, k));
+            arrayLists.add(arrayPart(comb, 0, k));
             int j = 0;
             for (; comb[j] + 1 == comb[j + 1]; ) {
                 comb[j] = j;
@@ -56,7 +64,7 @@ public class Main {
                 break;
             }
         }
-        return list2;
+        return arrayLists;
     }
 
     private static ArrayList<Integer> arrayPart(int[] array, int s, int e) {
